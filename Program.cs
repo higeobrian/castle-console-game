@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using CastleGrimtol.Project;
 
 namespace CastleGrimtol
 {
@@ -9,10 +10,9 @@ namespace CastleGrimtol
     {
         public static void Main(string[] args)
         {
-        Play();
         Game game = new Game();
+        game.Play();
         // Playing = true;
-
         }
     }
 }

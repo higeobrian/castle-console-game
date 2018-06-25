@@ -76,54 +76,54 @@ namespace CastleGrimtol.Project
                 switch (selection.ToLower())
                 {
                     case "help":
-                        Console.Clear();
+                        // Console.Clear();
                         Help();
                         break;
                     case "reset":
-                        Console.Clear();
+                        // Console.Clear();
                         Reset();
                         break;
                     case "quit":
-                        Console.Clear();
+                        // Console.Clear();
                         Quit();
                         break;
-                    case "torch":
-                        Console.Clear();
+                    case "take torch":
+                        // Console.Clear();
                         TakeItem(); //Do i need to input this in an array? 
                         break;
                     case "use torch":
-                        Console.Clear();
+                        // Console.Clear();
                         UseTorch(); //Do i need to input this in an array? 
                         break;
-                    case "key":
-                        Console.Clear();
+                    case "take key":
+                        // Console.Clear();
                         UseItem(); //Do i need to input this in an array?
                         break;
                     case "inventory":
-                        Console.Clear();
+                        // Console.Clear();
                         ShowInventory();
                         break;
                     case "look":
-                        Console.Clear();
+                        // Console.Clear();
                         Look();
                         break;
                     case "north":
-                        Console.Clear();
+                        // Console.Clear();
                         CurrentRoom = CurrentRoom.Go("north");
                         Console.WriteLine("You are in the Dragon's Dungeon Room, find the 'key'!");
                         break;
                     case "south":
-                        Console.Clear();
+                        // Console.Clear();
                         CurrentRoom = CurrentRoom.Go("south");
                         Console.WriteLine("You are in the Equipment Room, find a 'torch'!");
                         break;
                     case "east":
-                        Console.Clear();
+                        // Console.Clear();
                         CurrentRoom = CurrentRoom.Go("east");
                         Console.WriteLine("You are in the Goblin's Lair, he may be on vacation?");
                         break;
                     case "west":
-                        Console.Clear();
+                        // Console.Clear();
                         CurrentRoom = CurrentRoom.Go("west");
                         Console.WriteLine("You are now in the bar room! Have a good time brotha!");
                         break;
@@ -148,65 +148,108 @@ namespace CastleGrimtol.Project
 
         public void Look()
         {
-            Console.WriteLine("Type 'look' to get a description of the room your in.");
-            // CurrentRoom.  -- Need to print your description when user types "look".
-        }
-        public void ShowInventory()
-        {
-            Console.WriteLine("Type 'inventory' to see a list of items you have in your inventory:");
-            CurrentPlayer.Inventory.ForEach(item =>
+            Console.WriteLine(CurrentRoom.Description);
+            CurrentRoom.Items.ForEach(item =>
             {
                 Console.WriteLine(item.Name);
             });
         }
-        public void UseItem (string ItemName)
+        public void ShowInventory(string ItemName)
         {
-            if (CurrentRoom.item.Name == "key")
+            Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
+            if (item != null)
             {
-                Console.WriteLine("You have found the key to unlock the door to the Bar Room!");
+                if (item.Name == "inventory")
+                {
+                    Console.WriteLine("Type 'inventory' to see a list of items you have in your inventory:");
+                }
+                else
+                // CurrentPlayer.Inventory.ForEach(ItemName =>
+                {
+                    Console.WriteLine("To see what you have in your player's inventory, type 'inventory'");
+                    // });
+                }
             }
             else
             {
-                Console.WriteLine("You need to find the 'key' to unlock the final door, which leads you into a Bar");
+                Console.WriteLine("Command does not exist");
             }
         }
 
-          public void UseTorch (string name) 
+        public void UseItem(string ItemName)
         {
-            foreach (var item in CurrentPlayer.Inventory)
-        {
-            if (item.Name == name)
-        {
-            // return item;
-            Console.WriteLine("You have lit the torch and befriended the Dragon");
-        }
-        else
-        {
-            Console.WriteLine("You have failed to light the torch on time, you are now dead");
-            CurrentPlayer.Alive = false;
-        }
-        }
-        }
-        public void TakeItem(Item item)
-        {
-            if (item.Name == "torch")
+            Item item = CurrentRoom.Items.Find(i => i.Name == ItemName);
+            if (item != null)
             {
-                Console.WriteLine("You have retrieved the lit torch and can now navigate through the rooms");
-                CurrentPlayer.Inventory.Add(item);
+                if (item.Name == "use key") //key is in dragonDungeon.
+                {
+                    Console.WriteLine("You have found the key to unlock the door to the Bar Room!");
+                }
+                else
+                {
+                    Console.WriteLine("You need to find the 'key' to unlock the final door, which leads you into a Bar");
+                }
             }
             else
             {
-                Console.WriteLine("You need to pick up the 'torch' to navigate your way through the rooms");
+                System.Console.WriteLine("No such item exists");
             }
         }
-        // TODOS: 1. ELSE STATEMENT FOR WHEN USER FAILS TO USE TORCH IN DRAGON ROOM, ALIVE = FALSE; RESTART();
-        //        2. FIX PROGRAM.CS TO RUN GAME, SOLVE WHY IGAME IS HIGHLIGHTED ON THIS PAGE... ASK INSTRUCTORS.
-        //        3. ASK INSTRUCTORS IF I NEED TO REPLACE THE ROOM DESCRIPTION WHEN USING AN ITEM? OR IS CONSOLE.WRITELINE WHEN ITEM IS USED SUFFICE REQ.
-        //        4. FIX TAKE/USE ITEM IN SWITCH STATEMENT.
-        //        5. FIX PLAYER.CS USEITEM ISSUE. Removed UseItem in Room.cs... because I have it on Game.cs... is that ok? Remove void UseItem in Room Interface? 
-        //        6. ADD ITEM TO PLAYERS INVENTORY... Room.cs needs to be fixed to show that (TakeItem).
+
+        public void UseTorch(string ItemName)
+        {
+            Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
+            if (item != null)
+            // foreach (var item in CurrentPlayer.Inventory)
+            {
+                if (item.Name == "use torch") //Replaced Name with "use torch".. should it be called just torch? 
+                {
+                    // return item;
+                    Console.WriteLine("You have lit the torch and befriended the Dragon");
+                }
+                else
+                {
+                    Console.WriteLine("You have failed to light the torch on time, you are now dead");
+                    CurrentPlayer.Alive = false;
+                }
+            }
+            else
+            {
+                System.Console.WriteLine("No such item exists");
+            }
+        }
+        public void TakeItem(string itemName)
+        {
+            Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
+            if (item != null)
+
+                if (item.Name == "take torch")
+                {
+                    Console.WriteLine("You have retrieved the lit torch and can now navigate through the rooms");
+                    CurrentPlayer.Inventory.Add(item);
+                    CurrentRoom.Items.Remove(item);
+                }
+                else
+                {
+                    Console.WriteLine("You need to pick up the 'torch' to navigate your way through the rooms");
+                }
+            else
+            {
+                Console.WriteLine("What? Try again");
+            }
+        }
     }
+    //if (item != null)
+    //Console.WriteLine($"You pick up the {itemName}.");
+
+    // TODOS: 1. ELSE STATEMENT FOR WHEN USER FAILS TO USE TORCH IN DRAGON ROOM, ALIVE = FALSE; RESTART();
+    //        2. FIX PROGRAM.CS TO RUN GAME, SOLVE WHY IGAME IS HIGHLIGHTED ON THIS PAGE... ASK INSTRUCTORS.
+    //        3. ASK INSTRUCTORS IF I NEED TO REPLACE THE ROOM DESCRIPTION WHEN USING AN ITEM? OR IS CONSOLE.WRITELINE WHEN ITEM IS USED SUFFICE REQ.
+    //        4. FIX TAKE/USE ITEM IN SWITCH STATEMENT.
+    //        5. FIX PLAYER.CS USEITEM ISSUE. Removed UseItem in Room.cs... because I have it on Game.cs... is that ok? Remove void UseItem in Room Interface? 
+    //        6. ADD ITEM TO PLAYERS INVENTORY... Room.cs needs to be fixed to show that (TakeItem).
 }
+    }
 
 
 
