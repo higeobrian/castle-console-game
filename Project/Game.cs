@@ -89,19 +89,19 @@ namespace CastleGrimtol.Project
                         break;
                     case "take torch":
                         // Console.Clear();
-                        TakeItem(); //Do i need to input this in an array? 
+                        TakeItem("torch"); //Do i need to input this in an array? 
                         break;
                     case "use torch":
                         // Console.Clear();
-                        UseTorch(); //Do i need to input this in an array? 
+                        UseTorch("torch"); //Do i need to input this in an array? 
                         break;
                     case "take key":
                         // Console.Clear();
-                        UseItem(); //Do i need to input this in an array?
+                        UseItem("key"); //Do i need to input this in an array?
                         break;
                     case "inventory":
                         // Console.Clear();
-                        ShowInventory();
+                        ShowInventory("inventory");
                         break;
                     case "look":
                         // Console.Clear();
@@ -199,23 +199,17 @@ namespace CastleGrimtol.Project
         public void UseTorch(string ItemName)
         {
             Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
-            if (item != null)
+            if (item != null && CurrentRoom.Name == "Dragon Dungeon")
             // foreach (var item in CurrentPlayer.Inventory)
             {
-                if (item.Name == "use torch") //Replaced Name with "use torch".. should it be called just torch? 
-                {
-                    // return item;
                     Console.WriteLine("You have lit the torch and befriended the Dragon");
-                }
-                else
-                {
-                    Console.WriteLine("You have failed to light the torch on time, you are now dead");
-                    CurrentPlayer.Alive = false;
-                }
+                
             }
             else
             {
-                System.Console.WriteLine("No such item exists");
+                    Console.WriteLine("You have failed to light the torch on time, you are now dead");
+                    CurrentPlayer.Alive = false;
+                        Quit();
             }
         }
         public void TakeItem(string itemName)
@@ -249,7 +243,7 @@ namespace CastleGrimtol.Project
     //        5. FIX PLAYER.CS USEITEM ISSUE. Removed UseItem in Room.cs... because I have it on Game.cs... is that ok? Remove void UseItem in Room Interface? 
     //        6. ADD ITEM TO PLAYERS INVENTORY... Room.cs needs to be fixed to show that (TakeItem).
 }
-    }
+    
 
 
 
