@@ -42,7 +42,7 @@ namespace CastleGrimtol.Project
             Console.WriteLine("Welcome To Runescapee");
             Console.WriteLine("Your objective is to satisfy your hunger by navigating your way to the Bar Room, so you can get yourself a nice cold mug of ale");
             Console.WriteLine("Type 'help' to get the commands to play");
-            Console.WriteLine("Your first objective is to grab the 'torch' off the wall");
+            Console.WriteLine("Your first objective is to grab the 'torch' off the wall, then head 'east'");
 
             Room equipmentRoom = new Room("Equipment Room", "Choose Wisely!");
             Room goblinLair = new Room("Goblin Lair", "He might be out of town, terrorizing others.");
@@ -54,8 +54,8 @@ namespace CastleGrimtol.Project
             dragonDungeon.Directions.Add("west", bar);
             bar.Directions.Add("south", equipmentRoom);
 
-            Item torch = new Item("Torch", "The Torch will light up the rooms and guide you to your destination.");
-            Item key = new Item("Key", "This key unlocks the door to the Bar Room");
+            Item torch = new Item("torch", "The Torch will light up the rooms and guide you to your destination.");
+            Item key = new Item("key", "This key unlocks the door to the Bar Room");
 
             equipmentRoom.Items.Add(torch);
             dragonDungeon.Items.Add(key);
@@ -87,7 +87,7 @@ namespace CastleGrimtol.Project
                         // Console.Clear();
                         Quit();
                         break;
-                    case "take torch":
+                    case "torch":
                         // Console.Clear();
                         TakeItem("torch"); //Do i need to input this in an array? 
                         break;
@@ -216,8 +216,8 @@ namespace CastleGrimtol.Project
         {
             Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
             if (item != null)
-
-                if (item.Name == "take torch")
+{
+                if (item.Name.ToLower() == "torch")
                 {
                     Console.WriteLine("You have retrieved the lit torch and can now navigate through the rooms");
                     CurrentPlayer.Inventory.Add(item);
@@ -227,6 +227,7 @@ namespace CastleGrimtol.Project
                 {
                     Console.WriteLine("You need to pick up the 'torch' to navigate your way through the rooms");
                 }
+}
             else
             {
                 Console.WriteLine("What? Try again");
