@@ -9,39 +9,10 @@ namespace CastleGrimtol.Project
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal Damage { get; set; }
-
-        public Item (string name, string description, decimal damage)
+        public Item (string name, string description)
         {
          Name = name;
-         Damage = damage;
          Description = description;
         }
-
-  
-
-    // public void Sword()
-    //     {
-    //     Item.Damage -= 20;
-    //     if (Enemy.Score <= 0)
-    //   {
-    //     Alive = false;
-    //     Enemy.Score >= 0;
-    //   }
-    // }
-
-    // public void Bow()
-    //     {
-    //     Item.Damage -= 10;
-    //     if (Enemy.Score <= 0)
-    //   {
-    //     Alive = false;
-    //     Enemy.Health >= 0;
-    //   }
-    // }
-
-
-
-
     }
 }

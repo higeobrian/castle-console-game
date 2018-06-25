@@ -1,25 +1,25 @@
-using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Collections.Generic;
+// using System;
+// using System.Diagnostics;
+// using System.Threading;
+// using System.Collections.Generic;
 
-namespace CastleGrimtol.Project
-{
-    public class Enemy
-    {   
-        public string Name { get; set; }
-        public int Score { get; set; }
-        public string Description { get; set; }
-        public bool Alive { get; private set; } = true;
+// namespace CastleGrimtol.Project
+// {
+//     public class Enemy
+//     {   
+//         public string Name { get; set; }
+//         public int Score { get; set; }
+//         public string Description { get; set; }
+//         public bool Alive { get; private set; } = true;
 
-        public Enemy(string name, string description, int score)
-        {
-         Name = name;
-         Description = description;
-         Score = score;
-        }
-    }
-}
+//         public Enemy(string name, string description, int score)
+//         {
+//          Name = name;
+//          Description = description;
+//          Score = score;
+//         }
+//     }
+// }
 
 
 

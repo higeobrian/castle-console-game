@@ -10,15 +10,14 @@ namespace CastleGrimtol
         public static void Main(string[] args)
         {
             
-        var playing = true;
-        var game = new Game();
+        Game game = new Game();
         game.Setup();
+        Console.WriteLine("The people need a Burger King, are you up for the Challenge? yes/no");
+        game.Play();
+        var playing = true;
+
         while (playing)
-    
         {
-            game.Play();
-            Console.WriteLine("The people need a Burger King, are you up for the Challenge? yes/no");
-            if (Console.Read() == 'no') { playing = false; };
         }
 
 
