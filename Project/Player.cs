@@ -12,17 +12,9 @@ namespace CastleGrimtol.Project
         public List<Item> Inventory { get; set; } 
         public bool Alive { get; set; }
         
-        public Item UseItem (string name) 
-        {
-            foreach (var item in Inventory)
-        {
-            if (item.Name == name)
-        {
-            return item;
-        }
-        }
-            return null;
-        }
+            // return null;
+            //THIS IS WHERE I CALL PLAYERS DEATH, ALIVE = FALSE;
+
     // public void addItem (Item item)
     //     {
     //     Inventory.Add(item);

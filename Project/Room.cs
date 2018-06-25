@@ -29,29 +29,24 @@ namespace CastleGrimtol.Project
         }
         public void UseItem(Item item)
             {
-                if (item.Name == "key")
-                {
-                    Console.WriteLine("You have found the key to unlock the door to the white castle!");
-                }
-                else
-                {
-                    Console.WriteLine("You need to find the 'key' to unlock the final door, which leads to the white castle");
-                }
+              
             }
-        public void TakeItem(Item item)
-        {
-            if (item.Name == "torch")
-            {
-                Console.WriteLine("You have lit the torch and can now navigate through the rooms");
-                Items.Add(item);
-            }
-            else
-            {
-                Console.WriteLine("You need to pick up the 'torch' to navigate your way through the rooms");
-            }
-        }
     }
 }
+
+        //.find ??
+        // public void TakeItem(Item item)
+        // {
+        //     if (item.Name == "torch")
+        //     {
+        //         Console.WriteLine("You have retrieved the lit torch and can now navigate through the rooms");
+        //         Items.Add(item);
+        //     }
+        //     else
+        //     {
+        //         Console.WriteLine("You need to pick up the 'torch' to navigate your way through the rooms");
+        //     }
+        // }
             
         //need to be able to access invetory and then readline "attack" enemy.name(sword.attack) or something.
         //Do i need a booleam?
