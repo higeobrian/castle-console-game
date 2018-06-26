@@ -44,7 +44,7 @@ namespace CastleGrimtol.Project
             Console.WriteLine("Type 'help' to get the commands to play");
             Console.WriteLine("Your first objective is to grab the 'torch' off the wall, then head 'east'");
 
-            Room equipmentRoom = new Room("Equipment Room", "Choose Wisely!");
+            Room equipmentRoom = new Room("Equipment Room", "You are in the equipment room, find the torch!");
             Room goblinLair = new Room("Goblin Lair", "He might be out of town, terrorizing others.");
             Room dragonDungeon = new Room("Dragon Dungeon", "You must use your 'torch' to befriend the Dragon.");
             Room bar = new Room("Bar", "You are must taste the meat! Or you are not worthy of being the Burger King/Queen.");
@@ -95,7 +95,7 @@ namespace CastleGrimtol.Project
                         // Console.Clear();
                         UseTorch("torch"); //Do i need to input this in an array? 
                         break;
-                    case "take key":
+                    case "use key":
                         // Console.Clear();
                         UseItem("key"); //Do i need to input this in an array?
                         break;
@@ -110,7 +110,7 @@ namespace CastleGrimtol.Project
                     case "north":
                         // Console.Clear();
                         CurrentRoom = CurrentRoom.Go("north");
-                        Console.WriteLine("You are in the Dragon's Dungeon Room, find the 'key'!");
+                        Console.WriteLine("You are in the Dragon's Dungeon Room. QUICK! Type 'use torch' to show the dragon you're friendly, or he'll roast you to death!");
                         break;
                     case "south":
                         // Console.Clear();
@@ -120,12 +120,12 @@ namespace CastleGrimtol.Project
                     case "east":
                         // Console.Clear();
                         CurrentRoom = CurrentRoom.Go("east");
-                        Console.WriteLine("You are in the Goblin's Lair, he may be on vacation?");
+                        Console.WriteLine("You are in the Goblin's Lair, he may be on vacation as he is nowhere to be seen. Head 'north'.");
                         break;
                     case "west":
                         // Console.Clear();
                         CurrentRoom = CurrentRoom.Go("west");
-                        Console.WriteLine("You are now in the bar room! Have a good time brotha!");
+                        Console.WriteLine("You are now in the bar room! Have a good time brotha! You Win!");
                         break;
                         // default:
                         // Console.Clear();
@@ -179,21 +179,21 @@ namespace CastleGrimtol.Project
         public void UseItem(string ItemName)
         {
             Item item = CurrentRoom.Items.Find(i => i.Name == ItemName);
-            if (item != null)
+            if (item != null && item.Name == "key")
             {
-                if (item.Name == "use key") //key is in dragonDungeon.
-                {
-                    Console.WriteLine("You have found the key to unlock the door to the Bar Room!");
+                // if (item.Name == "use key") //key is in dragonDungeon.
+                // {
+                    Console.WriteLine("You have found and used the key to unlock the door to the Bar Room! You enter... Type 'west' to enter.");
                 }
                 else
                 {
-                    Console.WriteLine("You need to find the 'key' to unlock the final door, which leads you into a Bar");
+                    Console.WriteLine("You need to use the key to unlock the final door. Type 'use key'.");
                 }
-            }
-            else
-            {
-                System.Console.WriteLine("No such item exists");
-            }
+            // }
+            // else
+            // {
+            //     System.Console.WriteLine("No such item exists");
+            // }
         }
 
         public void UseTorch(string ItemName)
@@ -202,16 +202,17 @@ namespace CastleGrimtol.Project
             if (item != null && CurrentRoom.Name == "Dragon Dungeon")
             // foreach (var item in CurrentPlayer.Inventory)
             {
-                    Console.WriteLine("You have lit the torch and befriended the Dragon");
+                    Console.WriteLine("You have lit the torch and befriended the Dragon. Now grab the key by typing 'use key' to unlock the final door.");
                 
             }
             else
             {
-                    Console.WriteLine("You have failed to light the torch on time, you are now dead");
                     CurrentPlayer.Alive = false;
                         Quit();
+                    Console.WriteLine("You have failed to light the torch on time, you are now dead");
             }
         }
+
         public void TakeItem(string itemName)
         {
             Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
@@ -230,7 +231,7 @@ namespace CastleGrimtol.Project
 }
             else
             {
-                Console.WriteLine("What? Try again");
+                Console.WriteLine("No such item exists.");
             }
         }
     }
