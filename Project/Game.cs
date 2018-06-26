@@ -18,15 +18,18 @@ namespace CastleGrimtol.Project
         public void Help()
         {
             Console.WriteLine("List of Commands to play the Game:");
-            Console.WriteLine("Type 'help' to see list of Commands");
-            Console.WriteLine("Type 'reset' to reset the game");
-            Console.WriteLine("Type 'quit' to quit the game");
-            Console.WriteLine("Type 'north' to move North");
-            Console.WriteLine("Type 'east' to move East");
-            Console.WriteLine("Type 'south' to move South");
-            Console.WriteLine("Type 'west' to move West");
-            Console.WriteLine("Type 'torch' to retrieve lit torch off the wall");
-            Console.WriteLine("Type 'key' to use the key to open the door in the third room");
+            Console.WriteLine("Type 'help' to see list of Commands.");
+            Console.WriteLine("Type 'reset' to reset the game.");
+            Console.WriteLine("Type 'quit' to quit the game.");
+            Console.WriteLine("Type 'north' to move North.");
+            Console.WriteLine("Type 'east' to move East.");
+            Console.WriteLine("Type 'south' to move South.");
+            Console.WriteLine("Type 'west' to move West.");
+            Console.WriteLine("Type 'take torch' to retrieve lit torch off the wall and store it in your inventory.");
+            Console.WriteLine("Type 'use key' to use the key to open the door in the third room.");
+            Console.WriteLine("Type 'use torch' to befriend the dragon right after you enter the dragons dungeon.");
+            Console.WriteLine("Type 'look' to get a description of the room your in.");
+            Console.WriteLine("Type 'inventory' to check and see if you have any items on you.");
         }
         public void Quit()
         {
@@ -40,7 +43,7 @@ namespace CastleGrimtol.Project
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Clear();
             Console.WriteLine("Welcome To Runescapee");
-            Console.WriteLine("Your objective is to satisfy your hunger by navigating your way to the Bar Room, so you can get yourself a nice cold mug of ale");
+            Console.WriteLine("Your objective is to quinch your thirst by navigating your way to the Bar Room, so you can get yourself a nice cold mug of ale");
             Console.WriteLine("Type 'help' to get the commands to play");
             Console.WriteLine("Your first objective is to grab the 'torch' off the wall, then head 'east'");
 
@@ -60,7 +63,7 @@ namespace CastleGrimtol.Project
             equipmentRoom.Items.Add(torch);
             dragonDungeon.Items.Add(key);
 
-            Player newb = new Player("Newb", 100);
+            Player newb = new Player("newb", 100);
 
             CurrentPlayer = newb;
             Playing = true;
@@ -101,7 +104,7 @@ namespace CastleGrimtol.Project
                         break;
                     case "inventory":
                         // Console.Clear();
-                        ShowInventory("inventory");
+                        Inventory();
                         break;
                     case "look":
                         // Console.Clear();
@@ -131,17 +134,6 @@ namespace CastleGrimtol.Project
                         // Console.Clear();
                         // Console.WriteLine("I cannot identify your input, please try again or type 'help'");
                         // break;
-
-
-                        //     if (activeMenu.Equals(Menus.CheckoutBook))
-                        //     {
-                        //         myLibrary.Checkout(selection);
-                        //     }
-                        //     else
-                        //     {
-                        //         myLibrary.ReturnBook(selection);
-                        //     }
-                        //     break;
                 }
             }
         }
@@ -154,28 +146,15 @@ namespace CastleGrimtol.Project
                 Console.WriteLine(item.Name);
             });
         }
-        public void ShowInventory(string ItemName)
-        {
-            Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
-            if (item != null)
-            {
-                if (item.Name == "inventory")
-                {
-                    Console.WriteLine("Type 'inventory' to see a list of items you have in your inventory:");
-                }
-                else
-                // CurrentPlayer.Inventory.ForEach(ItemName =>
-                {
-                    Console.WriteLine("To see what you have in your player's inventory, type 'inventory'");
-                    // });
-                }
-            }
-            else
-            {
-                Console.WriteLine("Command does not exist");
-            }
-        }
 
+        public void Inventory()
+        {
+            System.Console.WriteLine("Here is what you have:");
+            CurrentPlayer.Inventory.ForEach(item =>
+            {
+                System.Console.WriteLine(item.Name + ": " + item.Description);
+            });
+        }
         public void UseItem(string ItemName)
         {
             Item item = CurrentRoom.Items.Find(i => i.Name == ItemName);
@@ -183,12 +162,12 @@ namespace CastleGrimtol.Project
             {
                 // if (item.Name == "use key") //key is in dragonDungeon.
                 // {
-                    Console.WriteLine("You have found and used the key to unlock the door to the Bar Room! You enter... Type 'west' to enter.");
-                }
-                else
-                {
-                    Console.WriteLine("You need to use the key to unlock the final door. Type 'use key'.");
-                }
+                Console.WriteLine("You have found and used the key to unlock the door to the Bar Room! You enter... Type 'west' to enter.");
+            }
+            else
+            {
+                Console.WriteLine("You need to use the key to unlock the final door. Type 'use key'.");
+            }
             // }
             // else
             // {
@@ -202,14 +181,14 @@ namespace CastleGrimtol.Project
             if (item != null && CurrentRoom.Name == "Dragon Dungeon")
             // foreach (var item in CurrentPlayer.Inventory)
             {
-                    Console.WriteLine("You have lit the torch and befriended the Dragon. Now grab the key by typing 'use key' to unlock the final door.");
-                
+                Console.WriteLine("You have lit the torch and befriended the Dragon. Now grab the key by typing 'use key' to unlock the final door.");
+
             }
             else
             {
-                    CurrentPlayer.Alive = false;
-                        Quit();
-                    Console.WriteLine("You have failed to light the torch on time, you are now dead");
+                CurrentPlayer.Alive = false;
+                Quit();
+                Console.WriteLine("You have failed to light the torch on time, you are now dead");
             }
         }
 
@@ -217,7 +196,7 @@ namespace CastleGrimtol.Project
         {
             Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
             if (item != null)
-{
+            {
                 if (item.Name.ToLower() == "torch")
                 {
                     Console.WriteLine("You have retrieved the lit torch and can now navigate through the rooms");
@@ -228,7 +207,7 @@ namespace CastleGrimtol.Project
                 {
                     Console.WriteLine("You need to pick up the 'torch' to navigate your way through the rooms");
                 }
-}
+            }
             else
             {
                 Console.WriteLine("No such item exists.");
@@ -245,7 +224,7 @@ namespace CastleGrimtol.Project
     //        5. FIX PLAYER.CS USEITEM ISSUE. Removed UseItem in Room.cs... because I have it on Game.cs... is that ok? Remove void UseItem in Room Interface? 
     //        6. ADD ITEM TO PLAYERS INVENTORY... Room.cs needs to be fixed to show that (TakeItem).
 }
-    
+
 
 
 
