@@ -176,17 +176,17 @@ namespace CastleGrimtol.Project
                         
                         if(CurrentRoom.Directions.ContainsKey("west"))
                         {
-                            if(CurrentRoom.Directions.ContainsKey("east"))
-                            {
+                            // if(CurrentRoom.Directions.ContainsKey("east"))
+                            // {
                                 //need to add a parameter above the east script, if(CurrentRoom == ")
-                            }
+                            // }
 
                         CurrentRoom = CurrentRoom.Go("west");
                         Quit();
                         Console.WriteLine("You are now in the bar room! Have a good time brotha! You Win!");
                         }
                         else{
-                            Console.WriteLine("You hit a wall");//redundant
+                            Console.WriteLine("The door locks behind you, you cannot go back into the equipment room.");//redundant
                         }
                         break;
                             // Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
