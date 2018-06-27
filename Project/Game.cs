@@ -18,6 +18,7 @@ namespace CastleGrimtol.Project
         public void Help()
         {
             Console.WriteLine("List of Commands to play the Game:");
+            Console.WriteLine("Cheat: Type 'take torch', type 'east', type 'grab key', type 'north', type 'use key' or 'light torch' to fight the dragon, type 'use key' or 'use torch' to open the door, type 'west' to win game.");
             Console.WriteLine("Type 'help' to see list of Commands.");
             Console.WriteLine("Type 'reset' to reset the game.");
             Console.WriteLine("Type 'quit' to quit the game.");
@@ -26,8 +27,11 @@ namespace CastleGrimtol.Project
             Console.WriteLine("Type 'south' to move South.");
             Console.WriteLine("Type 'west' to move West.");
             Console.WriteLine("Type 'take torch' to retrieve lit torch off the wall and store it in your inventory.");
+            Console.WriteLine("Type 'grab key' to unlock the door to the bar room in the dragon's dungeon.");
+            Console.WriteLine("Type 'pick mace' to pick up the mace to use as a weapon");
+            Console.WriteLine("Type 'attack mace' to use the mace against against your enemy");
             Console.WriteLine("Type 'use key' to use the key to open the door in the third room.");
-            Console.WriteLine("Type 'use torch' to befriend the dragon right after you enter the dragons dungeon.");
+            Console.WriteLine("Type 'light torch' to scare the dragon right after you enter the dragons dungeon.");
             Console.WriteLine("Type 'look' to get a description of the room your in.");
             Console.WriteLine("Type 'inventory' to check and see if you have any items on you.");
         }
@@ -45,29 +49,32 @@ namespace CastleGrimtol.Project
             Console.WriteLine("Welcome To Runescapee");
             Console.WriteLine("Your objective is to quinch your thirst by navigating your way to the Bar Room, so you can get yourself a nice cold mug of ale");
             Console.WriteLine("Type 'help' to get the commands to play");
-            Console.WriteLine("Your first objective is to grab the 'torch' off the wall, then head 'east'");
+            Console.WriteLine("Your first objective is to grab the torch and mace (if you dare to use it) off the wall by typing in 'take torch' and/or 'pick mace', then head 'east'");
 
-            Room equipmentRoom = new Room("Equipment Room", "You are in the equipment room, find the torch!");
-            Room goblinLair = new Room("Goblin Lair", "He might be out of town, terrorizing others.");
-            Room dragonDungeon = new Room("Dragon Dungeon", "You must use your 'torch' to befriend the Dragon.");
-            Room bar = new Room("Bar", "You are must taste the meat! Or you are not worthy of being the Burger King/Queen.");
+            Room equipmentRoom = new Room("Equipment Room", "You are in the equipment room, find the torch and mace! If you can't find it, check your 'inventory'.");
+            Room goblinLair = new Room("Goblin Lair", "He might be out of town, terrorizing others. Find and pick up the key, by typing 'grab key'. The door is locked, you have to unlock it to get out, type 'use key'.");
+            Room dragonDungeon = new Room("Dragon Dungeon", "You must use your torch to scare/fight the young dragon. Type 'light torch'.");
+            Room bar = new Room("Bar", "This is where you quinch your thirst by enjoying a refreshing mug of beer.");
 
             equipmentRoom.Directions.Add("east", goblinLair);
             goblinLair.Directions.Add("north", dragonDungeon);
             dragonDungeon.Directions.Add("west", bar);
             bar.Directions.Add("south", equipmentRoom);
 
-            Item torch = new Item("torch", "The Torch will light up the rooms and guide you to your destination.");
-            Item key = new Item("key", "This key unlocks the door to the Bar Room");
+            Item torch = new Item("torch", "The Torch will light up the rooms and guide you to your destination. It may go out when traveling. You may have to re-light the torch to fight the Dragon.");
+            Item key = new Item("key", "This key unlocks the door to the Bar Room, in the Dragon Dungeon.");
+            Item mace = new Item("mace", "This is a chained mace, that you can whip over your head and strike your opponent with");
 
             equipmentRoom.Items.Add(torch);
-            dragonDungeon.Items.Add(key);
+            goblinLair.Items.Add(key);
+            equipmentRoom.Items.Add(mace);
 
             Player newb = new Player("newb", 100);
 
             CurrentPlayer = newb;
             Playing = true;
             CurrentRoom = equipmentRoom;
+            //Can add bool where user has key set as true. Cannot go use direction key if still true. If used, turn false, checks false gives permission to use direction.
         }
 
         public void Play()
@@ -75,8 +82,9 @@ namespace CastleGrimtol.Project
             Setup();
             while (Playing)
             {
-                string selection = Console.ReadLine();
-                switch (selection.ToLower())
+                string selection = Console.ReadLine().ToLower();
+                string[] input=selection.Split(" ");
+                switch (input[0])
                 {
                     case "help":
                         // Console.Clear();
@@ -90,54 +98,99 @@ namespace CastleGrimtol.Project
                         // Console.Clear();
                         Quit();
                         break;
-                    case "torch":
-                        // Console.Clear();
-                        TakeItem("torch"); //Do i need to input this in an array? 
+                    case "take":
+                        if(input[1] == "torch"){
+                        TakeTorch("torch"); 
+                    }
                         break;
-                    case "use torch":
-                        // Console.Clear();
-                        UseTorch("torch"); //Do i need to input this in an array? 
+                    case "pick":
+                        if(input[1] == "mace"){
+                        PickMace("mace");
+                    }
                         break;
-                    case "use key":
-                        // Console.Clear();
-                        UseItem("key"); //Do i need to input this in an array?
+                    case "grab":
+                        if(input[1] == "key"){
+                        GrabKey("key");
+                    }
+                        break;
+                    case "light":
+                        if(input[1] == "torch"){
+                        UseItem("torch");
+                    }
+                        break;
+                    case "attack":
+                        if(input[1] == "mace"){
+                            AttackMace("mace");
+                        }
+                        break;
+                    case "use":
+                        if(input[1] == "key"){
+                        UseItem("key"); 
+                    }    
                         break;
                     case "inventory":
-                        // Console.Clear();
                         Inventory();
                         break;
                     case "look":
-                        // Console.Clear();
                         Look();
                         break;
                     case "north":
-                        // Console.Clear();
+
+                        if(CurrentRoom.Directions.ContainsKey("north"))
+                        {
                         CurrentRoom = CurrentRoom.Go("north");
                         Console.WriteLine("You are in the Dragon's Dungeon Room. QUICK! Type 'use torch' to show the dragon you're friendly, or he'll roast you to death!");
+                        }
+                        else{
+                            Console.WriteLine("You hit a wall");
+                        }
                         break;
+
                     case "south":
-                        // Console.Clear();
+                        
+                        if(CurrentRoom.Directions.ContainsKey("south"))
+                        {
                         CurrentRoom = CurrentRoom.Go("south");
                         Console.WriteLine("You are in the Equipment Room, find a 'torch'!");
+                        }
+                        else{
+                            Console.WriteLine("You hit a wall");
+                        }
+                
                         break;
+
                     case "east":
-                        // Console.Clear();
+
+                        if(CurrentRoom.Directions.ContainsKey("east"))
+                        {
                         CurrentRoom = CurrentRoom.Go("east");
-                        Console.WriteLine("You are in the Goblin's Lair, he may be on vacation as he is nowhere to be seen. Head 'north'.");
+                        Console.WriteLine("You are in the Goblin's Lair, he may be on vacation as he is nowhere to be seen. Grab the key by typing 'grab key' then head 'north'.");
+                        }
+                        else{
+                            Console.WriteLine("You hit a wall");
+                        }
                         break;
+
                     case "west":
-                        // Console.Clear();
+                        
+                        if(CurrentRoom.Directions.ContainsKey("west"))
+                        {
+                            // if(CurrentPlayer.Inventory(Item == "torch" //)
                         CurrentRoom = CurrentRoom.Go("west");
                         Console.WriteLine("You are now in the bar room! Have a good time brotha! You Win!");
+                        }
+                        else{
+                            Console.WriteLine("You hit a wall");
+                        }
                         break;
-                        // default:
+
+                    default:
                         // Console.Clear();
-                        // Console.WriteLine("I cannot identify your input, please try again or type 'help'");
-                        // break;
+                        Console.WriteLine("I cannot identify your input, please try again or type 'help'");
+                        break;
                 }
             }
         }
-
         public void Look()
         {
             Console.WriteLine(CurrentRoom.Description);
@@ -146,7 +199,6 @@ namespace CastleGrimtol.Project
                 Console.WriteLine(item.Name);
             });
         }
-
         public void Inventory()
         {
             System.Console.WriteLine("Here is what you have:");
@@ -155,44 +207,9 @@ namespace CastleGrimtol.Project
                 System.Console.WriteLine(item.Name + ": " + item.Description);
             });
         }
-        public void UseItem(string ItemName)
-        {
-            Item item = CurrentRoom.Items.Find(i => i.Name == ItemName);
-            if (item != null && item.Name == "key")
-            {
-                // if (item.Name == "use key") //key is in dragonDungeon.
-                // {
-                Console.WriteLine("You have found and used the key to unlock the door to the Bar Room! You enter... Type 'west' to enter.");
-            }
-            else
-            {
-                Console.WriteLine("You need to use the key to unlock the final door. Type 'use key'.");
-            }
-            // }
-            // else
-            // {
-            //     System.Console.WriteLine("No such item exists");
-            // }
-        }
 
-        public void UseTorch(string ItemName)
-        {
-            Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
-            if (item != null && CurrentRoom.Name == "Dragon Dungeon")
-            // foreach (var item in CurrentPlayer.Inventory)
-            {
-                Console.WriteLine("You have lit the torch and befriended the Dragon. Now grab the key by typing 'use key' to unlock the final door.");
 
-            }
-            else
-            {
-                CurrentPlayer.Alive = false;
-                Quit();
-                Console.WriteLine("You have failed to light the torch on time, you are now dead");
-            }
-        }
-
-        public void TakeItem(string itemName)
+        public void TakeTorch(string itemName)
         {
             Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
             if (item != null)
@@ -205,7 +222,7 @@ namespace CastleGrimtol.Project
                 }
                 else
                 {
-                    Console.WriteLine("You need to pick up the 'torch' to navigate your way through the rooms");
+                    Console.WriteLine("You need to pick up the 'torch' to navigate your way through the rooms and possibly use it as a weapon.");
                 }
             }
             else
@@ -213,22 +230,154 @@ namespace CastleGrimtol.Project
                 Console.WriteLine("No such item exists.");
             }
         }
-    }
-    //if (item != null)
-    //Console.WriteLine($"You pick up the {itemName}.");
 
-    // TODOS: 1. ELSE STATEMENT FOR WHEN USER FAILS TO USE TORCH IN DRAGON ROOM, ALIVE = FALSE; RESTART();
-    //        2. FIX PROGRAM.CS TO RUN GAME, SOLVE WHY IGAME IS HIGHLIGHTED ON THIS PAGE... ASK INSTRUCTORS.
-    //        3. ASK INSTRUCTORS IF I NEED TO REPLACE THE ROOM DESCRIPTION WHEN USING AN ITEM? OR IS CONSOLE.WRITELINE WHEN ITEM IS USED SUFFICE REQ.
-    //        4. FIX TAKE/USE ITEM IN SWITCH STATEMENT.
-    //        5. FIX PLAYER.CS USEITEM ISSUE. Removed UseItem in Room.cs... because I have it on Game.cs... is that ok? Remove void UseItem in Room Interface? 
-    //        6. ADD ITEM TO PLAYERS INVENTORY... Room.cs needs to be fixed to show that (TakeItem).
+
+
+            public void GrabKey(string itemName)
+        {
+            Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
+            if (item != null)
+            {
+                if (item.Name.ToLower() == "key")
+                {
+                    Console.WriteLine("You have retrieved the key and can now use it to open the door to the bar room in the dragon's dungeon. Type 'North' to enter the Dragon Dungeon Room.");
+                    CurrentPlayer.Inventory.Add(item);
+                    CurrentRoom.Items.Remove(item);
+                }
+                else
+                {
+                    Console.WriteLine("You need to pick up the key to unlock the door. Type 'grab key'! If not, you're stuck!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No such item exists, type help.");
+            }
+        }
+
+
+
+        public void PickMace(string itemName)
+        {
+            Item item = CurrentRoom.Items.Find(x => x.Name == itemName);
+            if (item != null)
+            {
+                if (item.Name.ToLower() == "mace")
+                {
+                    Console.WriteLine("You have retrieved the mace");
+                    CurrentPlayer.Inventory.Add(item);
+                    CurrentRoom.Items.Remove(item);
+                }
+                else
+                {
+                    Console.WriteLine("The mace does not exist in this room.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No such item exists, type help.");
+            }
+        }
+
+        
+        
+        
+        
+        
+        
+        
+        // If user 
+        // public void UseKey(string ItemName)
+        // {
+        //     Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
+            
+        //     if (item != null && item.Name == "key")
+        //     {
+        //         // if (item.Name == "use key") //key is in dragonDungeon.
+        //         // {
+        //         Console.WriteLine("You have found and used the key to unlock the door to the Bar Room! You enter... Type 'west' to enter.");
+        //     }
+        //     else
+        //     {
+        //         Console.WriteLine("The key is not in this room, or you did not take the correct action. You must 'use key' to unlock the door to the Bar Room.");
+        //     }
+        //     // }
+        //     // else
+        //     // {
+        //     //     System.Console.WriteLine("No such item exists");
+        //     // }
+        // }
+
+
+
+            //I could delete the above... because, i cannot open the door until i use the torch against the dragon first.
+            //If i use the key first instead of the torch on the dragon, I die (quit).
+
+
+        public void UseItem(string ItemName) 
+        {
+            Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
+            if (item != null)
+            {
+                if (item.Name == "torch" && CurrentRoom.Name != "Dragon Dungeon")
+                // Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
+                {
+                    if (item != null && CurrentRoom.Name == "Dragon Dungeon")
+                    {
+                        Console.WriteLine("You have used the torch against the Young Dragon, it runs and hides. You have a clear shot to the last door, open it by typing 'west'");
+                    }
+                }
+                else
+                        Console.WriteLine("The torch is already lit");
+                {
+                }
+            }
+            else
+                        Console.WriteLine("You do not have this item in your inventory");
+        }
+
+
+//use mace needs a dead...
+
+public void AttackMace(string ItemName)
+{
+    Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
+    if (item != null)
+    {
+        if(item.Name == "mace")
+        {
+            CurrentPlayer.Alive = false;
+                        Quit();
+                        Console.WriteLine("You have failed to light the torch on time OR, you did not 'take torch' while in the equipment room. You are now dead");
+        }
+    }
+}
+
+        // return null;
+        //         }
+
+        // public void CannotUse()
+        // {
+        //     Console.WriteLine("You cannot us")
+        // }
+
+    }
 }
 
 
 
 
 
+// FIX:
+// First command 'use torch', automatically ends the game. --- I CAN ONLY USE 'use torch' WHILE IN DUNGEON ROOM... 
+//Check code, because I crash when i use the method in the dragon dungeon.
+
+
+// CANNOT type north 2 or 3x in a row, game crashes... 
+// POSSIBLE FIX??? Check if CURRENTROOM.NAME == (Directions.ContainsKey(direction)), Console.Writeline("You hit a wall, try another direction");
+
+
+// Crashes when i use key without using the torch against the dragon first.
 
 
 
@@ -237,29 +386,5 @@ namespace CastleGrimtol.Project
 
 
 
-
-
-
-
-
-
-
-// Console.WriteLine("Type 'east' to enter the Goblin's Lair");
-// Console.WriteLine("Type 'north' to enter the Dragons Dungeon");
-// Console.WriteLine("Type 'west' to enter the White Castle Room");
-// Console.WriteLine("Type 'south' to enter the Equipment Room");
-
-// Console.WriteLine("You light the torch. A dragon appears in front of you. He sees you, but identifies you as a friend because you carry the torch. You see a key lying next to him.");
-// Console.WriteLine("You do not have a torch, and had wandered your way into the Dragons Dungeon. The dragon does not see you as a friend and spits fire at you. You die.");
-
-// Console.WriteLine("You enter the White Castle room, and a greeted by winches, serving burgers and beer. You win!");
-
-// Console.WriteLine("Type 'Attack' or 'Pet' to make your move on the Great White Dragon")
-// Console.WriteLine("You have slayed the Great White Dragon")
-// Console.Write("Type 'Ride' to ride the dragon up to White Castle or 'Drop' to fight the skinless Goblin once again");`  \
-
-// Console.Writeline("Type 'eat' to satisfy your hunger");
-// Console.Writeline("You have consumed the royal burger and are now declared 'Burger King'");
-// //if (CurrentRoom.Items.Count > 0) // for the torch... do switch statements for directions. IF they type a command, .. north, south, east, west.. switch statements.
 
 
