@@ -57,7 +57,7 @@ namespace CastleGrimtol.Project
             Room bar = new Room("Bar", "This is where you quinch your thirst by enjoying a refreshing mug of beer.");
 
             equipmentRoom.Directions.Add("east", goblinLair);
-            goblinLair.Directions.Add("west", equipmentRoom);
+            // goblinLair.Directions.Add("west", equipmentRoom);
             goblinLair.Directions.Add("north", dragonDungeon);
             dragonDungeon.Directions.Add("south", goblinLair);
             dragonDungeon.Directions.Add("east", bar);
@@ -176,11 +176,10 @@ namespace CastleGrimtol.Project
                         
                         if(CurrentRoom.Directions.ContainsKey("west"))
                         {
-                            // Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
-                            //  if (item != null) ..... 
-                            //  prevent user for using the go west command... or (item = null)... allow user to go west.
-
-                            //then repeat for dragon room.. north. user needs to use keey.. check player inventory in useitem() or create new method for key.
+                            if(CurrentRoom.Directions.ContainsKey("east"))
+                            {
+                                //need to add a parameter above the east script, if(CurrentRoom == ")
+                            }
 
                         CurrentRoom = CurrentRoom.Go("west");
                         Quit();
@@ -190,6 +189,11 @@ namespace CastleGrimtol.Project
                             Console.WriteLine("You hit a wall");//redundant
                         }
                         break;
+                            // Item item = CurrentPlayer.Inventory.Find(i => i.Name == ItemName);
+                            //  if (item != null) ..... 
+                            //  prevent user for using the go west command... or (item = null)... allow user to go west.
+
+                            //then repeat for dragon room.. north. user needs to use keey.. check player inventory in useitem() or create new method for key.
 
                     default:
                         // Console.Clear();
