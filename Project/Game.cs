@@ -49,7 +49,7 @@ namespace CastleGrimtol.Project
             Console.WriteLine("Welcome To Runescapee");
             Console.WriteLine("Your objective is to quinch your thirst by navigating your way to the Bar Room, so you can get yourself a nice cold mug of ale");
             Console.WriteLine("Type 'help' to get the commands to play");
-            Console.WriteLine("Your first objective is to grab the torch and mace (if you dare to use it) off the wall by typing in 'take torch' and/or 'pick mace', then head 'east'");
+            Console.WriteLine("You're currently in the equipment room. Your first objective is to grab the torch and mace (if you dare to use it) off the wall by typing in 'take torch' and/or 'pick mace', then head 'east'");
 
             Room equipmentRoom = new Room("Equipment Room", "You are in the equipment room, find the torch and mace! If you can't find it, check your 'inventory'.");
             Room goblinLair = new Room("Goblin Lair", "He might be out of town, terrorizing others. Find and pick up the key, by typing 'grab key'. The door is locked, you have to unlock it to get out, type 'use key'.");
@@ -58,15 +58,12 @@ namespace CastleGrimtol.Project
 
             equipmentRoom.Directions.Add("east", goblinLair);
             goblinLair.Directions.Add("west", equipmentRoom);
-
             goblinLair.Directions.Add("north", dragonDungeon);
             dragonDungeon.Directions.Add("south", goblinLair);
-
-            dragonDungeon.Directions.Add("west", bar);
-            bar.Directions.Add("east", dragonDungeon);
-
-            bar.Directions.Add("south", equipmentRoom);
-            equipmentRoom.Directions.Add("north", bar);
+            dragonDungeon.Directions.Add("east", bar);
+            // equipmentRoom.Directions.Add("north", bar);
+            // bar.Directions.Add("west", dragonDungeon);
+            // bar.Directions.Add("south", equipmentRoom);
 
             Item torch = new Item("torch", "The Torch will light up the rooms and guide you to your destination. It may go out when traveling. You may have to re-light the torch to fight the Dragon.");
             Item key = new Item("key", "This key unlocks the door to the Bar Room, in the Dragon Dungeon.");
@@ -186,11 +183,11 @@ namespace CastleGrimtol.Project
                             //then repeat for dragon room.. north. user needs to use keey.. check player inventory in useitem() or create new method for key.
 
                         CurrentRoom = CurrentRoom.Go("west");
-                        Console.WriteLine("You are now in the bar room! Have a good time brotha! You Win!");
                         Quit();
+                        Console.WriteLine("You are now in the bar room! Have a good time brotha! You Win!");
                         }
                         else{
-                            Console.WriteLine("You hit a wall");
+                            Console.WriteLine("You hit a wall");//redundant
                         }
                         break;
 
